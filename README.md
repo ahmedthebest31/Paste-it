@@ -1,25 +1,39 @@
 # Paste-it
- program to paste clipboard content in protected Fields
+A program that pastes the contents of the clipboard in protected fields.
+Purpose
+Sometimes, pasting the clipboard content isn't possible due to various reasons such as:
+• System password fields on OSX
+• Using a virtual machine where the clipboard isn't shared
+• Remote Desktop where the clipboard doesn't work in password fields
+• Connected via RDP with disabled clipboard sharing and local drives
 
-It "types" the contents of the clipboard.
-
-Why can't you just paste the contents you ask?  Sometimes pasting just doesn't work.
-* One example is in system password fields on OSX.
-* Sometimes you're working in a VM and the clipboard isn't shared.
-* Other times you're working via Remote Desktop and again, the clipboard doesn't work in password boxes such as the system login prompts.
-* Connected via RDP and clipboard sharing is disabled and so is mounting of local drives.  If the system doesn't have internet access there's no easy way to get things like payloads or Powershell scripts onto it... until now.
 
 ## Windows
-The Windows version is written in [AutoHotKey](https://www.autohotkey.com/) 
-just download the "Paste-it.exe" exe file and run it 
-you should have it in the    tray icons
-win + V
-to paste the clipboard content in the active program
+The Windows version is written in AutoHotKey and can be run by downloading the "Paste-it.exe" file. It can be accessed from the tray icons. 
+using the Win + V keyboard shortcut to type the text in the clipboard. 
 
+### To make it auto-start with Windows, 
+place a shortcut in the startup folder (open the Run box and type "shell:startup").
 
+## Linux
+this is just a bash script
+This version for Linux requires `xdotool` and `xclip` to be installed. The following command pastes the clipboard content to the selected window:
 
-##to makje it auto start with windows:
-open the Run box and type "shell:startup" and put a shortcut in this folder  
-done
+```bash
+xclip -selection clipboard -out | tr \\n \\r | xdotool selectwindow windowfocus type --clearmodifiers --delay 25 --window %@ --file 
+```
 
-mac and linux will come soon
+This command can be saved as a script and mapped to a hotkey. 
+
+### A version that immediately pastes to the active window is also available:
+```bash
+xclip -selection clipboard -out | tr \\n \\r | xdotool type --clearmodifiers --delay 25 --file -
+```
+
+## OSX
+The Mac version is written in AppleScript and can be run using the following command:
+```
+osascript -e 'tell application "System Events" to keystroke the clipboard as text'
+```
+
+To bind this to a keyboard shortcut, you can use built-in OSX utilities or third-party programs such as BetterTouchTool, Keyboard Maestro, or Hammerspoon. 
